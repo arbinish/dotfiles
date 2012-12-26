@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/etc/ldap/slapd.d/cn=config'
+let g:netrw_dirhist_2='/home/binish/dev/python/tmp/docManager/docManager'
+let g:netrw_dirhist_3='/home/binish/dev/python/tmp/docManager/templates'
+let g:netrw_dirhist_4='/home/binish/Documents/Zynga/Beagle'
+let g:netrw_dirhist_5='/home/binish/Documents/Interview'
+let g:netrw_dirhist_6='/home/binish/Documents/Zynga/DAPI'

@@ -1,0 +1,37 @@
+escape ^xX
+backtick 1 2 2 $HOME/bin/get_freemem
+backtick 2 0 0 $HOME/bin/get_ifrate
+
+#hardstatus alwayslastline "%{= kW}%-w%{= gk}%50>%n |%1`|%2`|%t%{-}%+w%<"
+hardstatus alwayslastline '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %d/%m %{W}%c %{g}]'
+#hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
+
+
+#caption always "%?%F%{.R.}%?%3n %t%? [%h]%?"
+vbell off
+defmonitor on
+multiuser on
+
+deflog on
+logfile  $HOME/log/screen-logs/%Y%m%d-%t-%n.log
+logfile flush 5
+logtstamp on
+logtstamp after 10
+startup_message off
+
+screen 0
+#exec $HOME/bin/screen-ssh-agent
+#exec true
+#source $HOME/.ssh/screen_agent
+
+screen 1
+
+select 0
+
+# terminfo and termcap for nice 256 color terminal
+# allow bold colors - necessary for some reason
+attrcolor b ".I" 
+# tell screen how to set colors. AB = background, AF=foreground 
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm' 
+# erase background with current bg color 
+#defbce "on"
