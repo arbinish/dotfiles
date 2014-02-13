@@ -1,6 +1,6 @@
 escape ^xX
-backtick 1 2 2 $HOME/bin/get_freemem
-backtick 2 0 0 $HOME/bin/get_ifrate
+#backtick 1 2 2 $HOME/bin/get_freemem
+#backtick 2 0 0 $HOME/bin/get_ifrate
 
 #hardstatus alwayslastline "%{= kW}%-w%{= gk}%50>%n |%1`|%2`|%t%{-}%+w%<"
 hardstatus alwayslastline '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %d/%m %{W}%c %{g}]'
@@ -12,11 +12,11 @@ vbell off
 defmonitor on
 multiuser on
 
-deflog on
-logfile  $HOME/log/screen-logs/%Y%m%d-%t-%n.log
-logfile flush 5
-logtstamp on
-logtstamp after 10
+#deflog on
+#logfile  $HOME/log/screen-logs/%Y%m%d-%t-%n.log
+#logfile flush 5
+#logtstamp on
+#logtstamp after 10
 startup_message off
 
 screen 0
@@ -25,7 +25,6 @@ screen 0
 #source $HOME/.ssh/screen_agent
 
 screen 1
-
 select 0
 
 # terminfo and termcap for nice 256 color terminal

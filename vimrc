@@ -146,3 +146,10 @@ inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
 " mkdir -p ~/.vim/ftplugin
 " wget -O ~/.vim/ftplugin/python_editing.vim http://www.vim.org/scripts/download_script.php?src_id=5492
 set nofoldenable
+
+" vim-airline
+" installation: dependency pathogen [ refer above on how to install pathogen ]
+" additionally install one of the patched powerline fonts
+" git clone https://github.com/bling/vim-airline ~/.vim/bundle/vim-airline
+"
+let g:airline_powerline_fonts = 1
