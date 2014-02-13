@@ -7,7 +7,7 @@ set -g prefix C-x
 unbind C-b
 
 # Ensure that we can send `Ctrl-a` to other apps.
-bind C-a send-prefix
+bind C-x send-prefix
 
 # Reload the file with Prefix r.
 bind r source-file ~/.tmux.conf \; display "Reloaded!"
