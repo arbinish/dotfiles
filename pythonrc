@@ -1,0 +1,22 @@
+import atexit, os, readline, rlcompleter, platform
+if 'Darwin' in platform.uname()[0]:
+  # for Mac OS X
+  readline.parse_and_bind('bind ^I rl_complete')
+else:
+  # GNU readline
+  readline.parse_and_bind('tab: complete')
+
+historyPath = os.path.expanduser("~/.pyhistory")
+def save_history(historyPath=historyPath):
+  import readline
+  readline.write_history_file(historyPath)
+
+
+try:
+  if os.path.exists(historyPath):
+    readline.read_history_file(historyPath)
+except:
+  pass
+
+atexit.register(save_history)
+del os, atexit, readline, rlcompleter, save_history, historyPath
