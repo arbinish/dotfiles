@@ -3,6 +3,9 @@
 # you can make triggering commands more comfottable!
 set -g prefix C-x
 
+# Synchronize multiple panes, kinda cssh effect
+# setw synchronize-panes on
+
 # Free the original `Ctrl-b` prefix keybinding.
 unbind C-b
 
@@ -65,6 +68,7 @@ setw -g mode-mouse off
 set -g mouse-select-pane off
 set -g mouse-resize-pane off
 set -g mouse-select-window off
+set -g mouse-utf8 off
 
 # Set the default terminal mode to 256color mode.
 set -g default-terminal "screen-256color"
