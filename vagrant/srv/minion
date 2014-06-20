@@ -1,0 +1,6 @@
+master: localhost
+file_client: local
+file_roots:
+    base:
+        - /srv/salt
+        - /srv/salt/base
