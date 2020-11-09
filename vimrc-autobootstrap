@@ -23,6 +23,7 @@ Plug 'lepture/vim-jinja'
 Plug 'pangloss/vim-javascript'
 Plug 'alvan/vim-closetag'
 Plug 'maxmellon/vim-jsx-pretty'
+Plug 'tpope/vim-surround'
 call plug#end()
 
 filetype plugin indent on
@@ -199,10 +200,48 @@ function! XTermPasteBegin()
 endfunction
 
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
-set guifont=Consolas:h17
-set guioptions-=T
+
+if has("gui_running")
+    if has("gui_macvim")
+        set guifont=Consolas:h17
+        set macmeta
+    endif
+    if has("gui_gtk")
+        set guifont=Consolas\ 13
+    endif
+    set guioptions-=T
+endif
 "colorscheme zellner
+set hidden
 set bg=dark
+setlocal wildignore=*.pyc
+setlocal path=.,**
+
+"set colorcolumn=+1
+highlight OverLength ctermbg=red ctermfg=white guibg=Cyan
 set textwidth=120
-set colorcolumn=+1
-highlight ColorColumn guibg=Black
+set cursorline
+set splitright splitbelow
+match OverLength /\%121v.\+/
+
+let g:ale_python_flake8_executable = expands('~') . '/.virtualenvs/p3/bin/flake8'
+let g:ale_python_flake8_use_global = 1
+let g:ale_python_flake8_options = '--max-line-length 120'
+let g:ale_python_yapf_executable = expands('~') . '/.virtualenvs/p3/bin/yapf'
+let g:ale_python_yapf_use_global = 1
+let g:ale_python_reorder_python_imports_executable = expand('~') . '/.virtualenvs/p3/bin/reorder-python-imports'
+let g:ale_python_reorder_python_imports_use_global = 1
+let g:ale_fix_on_save = 1
+let g:ale_linters = { 'python': ['flake8'] }
+let g:ale_fixers = {
+            \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+            \ 'python': ['yapf', 'reorder-python-imports']
+            \}
+
+" terminal fix for M-b M-f
+tmap <expr> <M-b> SendToTerm("\<Esc>b")
+tmap <expr> <M-f> SendToTerm("\<Esc>f")
+func SendToTerm(what)
+    call term_sendkeys('', a:what)
+    return ''
+endfunc
