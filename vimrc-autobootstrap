@@ -245,3 +245,7 @@ func SendToTerm(what)
     call term_sendkeys('', a:what)
     return ''
 endfunc
+
+" set cursor color
+highlight Cursor guifg=black guibg=cyan
+set guicursor+=i:blinkon0 guicursor+=n-v-c:blinkon0
