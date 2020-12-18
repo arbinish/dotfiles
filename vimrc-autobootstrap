@@ -26,6 +26,7 @@ Plug 'maxmellon/vim-jsx-pretty'
 Plug 'tpope/vim-surround'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'fatih/vim-go'
 call plug#end()
 
 if need_to_install_plugins == 1
@@ -102,13 +103,13 @@ filetype on
 filetype plugin indent on
 
 " fzf
-map <C-f> :Files<CR>
-map <leader>b :BLines<CR>
-map <leader>l :Lines<CR>
+nnoremap <C-f> :Files<CR>
+nnoremap <leader>b :BLines<CR>
+nnoremap <leader>l :Lines<CR>
 " map <leader>c :Tags<CR>
-map <leader>c :Ag<CR>
-map <leader>; :Buffers<CR>
-map <C-s> :w<CR>
+nnoremap <leader>c :Ag<CR>
+nnoremap <leader>; :Buffers<CR>
+nnoremap <C-s> :w<CR>
 
 " lightline
 set noshowmode
@@ -181,7 +182,7 @@ endfunction
 
 function! StartUp()
     if 0 == argc()
-        NERDTree
+        " NERDTree
     end
 endfunction
 autocmd VimEnter * call StartUp()
@@ -211,11 +212,14 @@ function! XTermPasteBegin()
 endfunction
 
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+inoremap jk <esc>
 
 if has("gui_running")
     if has("gui_macvim")
-        set guifont=Consolas:h17
+        " set guifont=Victor\ Mono:h15
+        set guifont=Monoid\ Retina:h14
         set macmeta
+        set transparency=10
     endif
     if has("gui_gtk")
         set guifont=Consolas\ 13
@@ -235,18 +239,21 @@ set cursorline
 set splitright splitbelow
 au FileType python match OverLength /\%121v.\+/
 
-let g:ale_python_flake8_executable = expands('~') . '/.virtualenvs/p3/bin/flake8'
+let g:ale_python_flake8_executable = expand('~') . '/.virtualenvs/p3/bin/flake8'
 let g:ale_python_flake8_use_global = 1
 let g:ale_python_flake8_options = '--max-line-length 120'
-let g:ale_python_yapf_executable = expands('~') . '/.virtualenvs/p3/bin/yapf'
-let g:ale_python_yapf_use_global = 1
+"let g:ale_python_yapf_executable = expand('~') . '/.virtualenvs/p3/bin/yapf'
+"let g:ale_python_yapf_use_global = 1
+let g:ale_python_autopep8_executable = expand('~') . '/.virtualenvs/p3/bin/autopep8'
+let g:ale_python_autopep8_use_global = 1
+let g:ale_python_autopep8_options = '--max-line-length 120'
 let g:ale_python_reorder_python_imports_executable = expand('~') . '/.virtualenvs/p3/bin/reorder-python-imports'
 let g:ale_python_reorder_python_imports_use_global = 1
 let g:ale_fix_on_save = 1
 let g:ale_linters = { 'python': ['flake8'] }
 let g:ale_fixers = {
             \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-            \ 'python': ['yapf', 'reorder-python-imports']
+            \ 'python': ['autopep8', 'reorder-python-imports']
             \}
 
 " terminal fix for M-b M-f
@@ -260,3 +267,49 @@ endfunc
 " set cursor color
 highlight Cursor guifg=black guibg=cyan
 set guicursor+=i:blinkon0 guicursor+=n-v-c:blinkon0
+highlight Visual ctermbg=114
+
+
+" custom functions
+"
+" search for the term under your cursor
+function VSearch()
+    normal! "kyiw
+    execute "normal! :Ag \<C-R>k\<CR>"
+endfunction
+noremap <leader>s :call VSearch()<CR>
+
+let g:is_transparent = 1
+highlight Normal ctermbg=NONE
+noremap <silent> <Leader>j :call ToggleTransparency()<CR>
+function ToggleTransparency()
+    if g:is_transparent == 1
+        highlight Normal ctermbg=235
+        let g:is_transparent = 0
+        echom "Disable transparency"
+    else
+        let g:is_transparent = 1
+        highlight Normal ctermbg=NONE
+        echom "Enable Transparency"
+    endif
+endfunction
+
+" custom insert mode map
+inoremap <C-a> <Esc>^i
+inoremap <C-b> <Esc>Bi
+inoremap <C-f> <Esc>lWi
+inoremap <C-k> <Esc>ki
+inoremap <C-j> <Esc>ji
+inoremap <M-x> <Esc>:
+inoremap <M-f> <Esc>/\v
+inoremap <M-s> <Esc>:call VSearch()<CR>i
+nnoremap <leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <leader>' :terminal ++rows=10<CR>
+
+function QuitWithMsg()
+    echo('Quit...')
+    sleep 500m
+    quit
+endfunction
+
+nnoremap <leader>q :call QuitWithMsg()<CR>
