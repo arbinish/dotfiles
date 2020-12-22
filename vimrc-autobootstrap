@@ -27,6 +27,7 @@ Plug 'tpope/vim-surround'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'fatih/vim-go'
+Plug 'vimwiki/vimwiki'
 call plug#end()
 
 if need_to_install_plugins == 1
@@ -45,6 +46,7 @@ set t_ut=
 
 " turn on line numbering
 set number
+set cursorcolumn
 
 " sane text files
 set fileformat=unix
@@ -120,7 +122,7 @@ set foldmethod=indent
 set foldlevel=99
 
 " wrap toggle
-setlocal nowrap
+setlocal wrap
 noremap <silent> <Leader>w :call ToggleWrap()<CR>
 function ToggleWrap()
     if &wrap
@@ -264,10 +266,14 @@ func SendToTerm(what)
     return ''
 endfunc
 
+" set split and fold separator
+set fillchars+=vert:│,fold:━,diff:━
+highlight Folded ctermfg=190
+
 " set cursor color
 highlight Cursor guifg=black guibg=cyan
 set guicursor+=i:blinkon0 guicursor+=n-v-c:blinkon0
-highlight Visual ctermbg=114
+highlight Visual ctermbg=39
 
 
 " custom functions
@@ -298,8 +304,9 @@ endfunction
 inoremap <C-a> <Esc>^i
 inoremap <C-b> <Esc>Bi
 inoremap <C-f> <Esc>lWi
-inoremap <C-k> <Esc>ki
-inoremap <C-j> <Esc>ji
+" <C-k> conflicts with digraph
+" inoremap <C-k> <Esc>ki
+" inoremap <C-j> <Esc>ji
 inoremap <M-x> <Esc>:
 inoremap <M-f> <Esc>/\v
 inoremap <M-s> <Esc>:call VSearch()<CR>i
@@ -313,3 +320,4 @@ function QuitWithMsg()
 endfunction
 
 nnoremap <leader>q :call QuitWithMsg()<CR>
+set shell=/usr/local/bin/fish
