@@ -1,0 +1,11 @@
+layout {
+    pane command="python3" {
+    }
+    pane command="make" {
+        cwd "dev/me/go-bookmarks/"
+        args "clean" "all"
+    }
+    //pane size=2 borderless=true {
+    //    plugin location="zellij:status-bar"
+    //}
+}
