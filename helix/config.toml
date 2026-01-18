@@ -1,0 +1,59 @@
+theme = "mytheme"
+# theme = "adwaita-dark"
+
+
+
+[editor]
+idle-timeout = 50
+auto-pairs = true
+line-number = "relative"
+mouse = false
+rulers = [120]
+auto-format = true
+color-modes = true
+true-color = true
+cursorline = true
+cursorcolumn = false
+bufferline = "multiple"
+file-picker = { hidden = false }
+
+[editor.statusline]
+left = ["mode", "spinner"]
+center = ["file-name"]
+right = ["diagnostics", "selections", "position", "file-encoding", "file-line-ending", "file-type"]
+separator = "│"
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[keys.normal.space.c]
+r = [":w", ":config-reload"]
+o = ":config-open"
+l = ":o ~/.config/helix/languages.toml"
+i = ":indent-style 2"
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true
+
+[keys.normal]
+C-p = ["scroll_up", "move_line_up"]
+C-n = ["scroll_down", "move_line_down"]
+A-w = ":buffer-close"
+
+[keys.normal.space]
+"." = "file_picker_in_current_buffer_directory"
+
+
+[keys.insert]
+j = { j = "normal_mode" }
+# "C-o" = "normal_mode"
+"C-space" = "completion"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.soft-wrap]
+enable = true

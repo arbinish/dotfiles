@@ -1,0 +1,20 @@
+[[language]]
+name = "tsx"
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "typescript"] }
+# name = "jsx"
+# language-servers = [ "typescript-language-server", "tailwindcss-react", "eslint"]
+# grammar = "javascript"
+# formatter = { command = 'npx', args = ["prettier", "--parser", "typescript"] }
+# indent = { tab-width = 4, unit = "\t" }
+# auto-format = true
+
+
+[[language]]
+name = "rust"
+language-servers = ["rust-analyzer" ]
+formatter = { command = "rustfmt" }
+auto-format = true
+indent = { tab-width = 4, unit = "t" }
+[language-server.rust-analyzer]
+command = "rust-analyzer"
