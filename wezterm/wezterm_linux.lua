@@ -45,8 +45,11 @@ local config = {
   -- { family = "agave Nerd Font Mono", weight = "Regular"},
   -- { family = "Operator Mono Lig", weight = "Bold"},
   }),
-  font_size = 16,
+  font_size = 14,
   -- line_height = 1.02,
+  -- command_palette_font = wezterm.font("Monego Ligatures"),
+  command_palette_font_size = 11.0,
+  -- command_palette_fg_color = "#ffa500",
   freetype_load_target = "Light",
   freetype_render_target = "HorizontalLcd",
   color_scheme = "BirdsOfParadise",
@@ -68,8 +71,9 @@ local config = {
     selection_fg = "black",
   },
 	window_frame = {
-		font = wezterm.font({ family = "Orbitron", weight = "Bold" }),
-		font_size = 11.0,
+		font = wezterm.font({ family = "Audiowide", weight = "Bold" }),
+		-- font = wezterm.font({ family = "Orbitron", weight = "Bold" }),
+		font_size = 12.0,
 	},
 	quick_select_patterns = {
 		  -- match things that look like sha1 hashes
@@ -181,16 +185,29 @@ wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_wid
 end)
 
 wezterm.on('update-right-status', function(window, pane)
-  window:set_right_status(wezterm.format({
-  	{ Foreground = { Color = '#FFA500' }},
-  	{ Text = ' ' .. wezterm.strftime('%a') .. ' '},
-  	-- Separator
-    { Foreground = { Color = '#444b6a' } },
-    { Text = ' | ' },
+  local cells = {}
 
-    { Foreground = { Color = '#4fd6be' } },
-    { Text = ' ' .. wezterm.strftime('%b %d %I:%M %p ') .. ' ' }, -- Clock on the right
-  }))
+  table.insert(cells, { Foreground = { Color = '#FFA500' }})
+  table.insert(cells, { Text = ' ' .. wezterm.strftime('%a %b %d') .. ' ' })
+
+  table.insert(cells,  { Foreground = { Color = '#444b6a' } })
+  table.insert(cells, { Text = ' | ' })
+
+  table.insert(cells, { Foreground = { Color = '#4fd6be'}})
+  table.insert(cells,  { Text = ' ' .. wezterm.strftime('%I : %M %p ') .. ' ' }) -- Clock on the right
+
+  for _, b in ipairs(wezterm.battery_info()) do
+    local pct = math.floor(b.state_of_charge * 100)
+    local color = '#a6de31'
+    if pct < 20 then color = '#f7768e' end
+    local icon = '󰁹'
+    if b.state == 'Charging' then icon = '󱐋' end
+    table.insert(cells, { Foreground = { Color = '#444b6a' } })
+    table.insert(cells, { Text = ' | ' })
+    table.insert(cells, { Foreground = { Color = color } })
+    table.insert(cells, { Text = icon .. ' ' .. pct .. '%'  .. ' '})
+  end
+  window:set_right_status(wezterm.format(cells))
 end)
 
 return config
