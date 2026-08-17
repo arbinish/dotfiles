@@ -32,14 +32,24 @@ const CryptoReport = {
 
   async signPayload(payload) {
     try {
-      const payloadStr = JSON.stringify(payload);
+      // Ultra-compact pipe-delimited format: name|code|avatar|ganas|quests
+      const compactStr = [
+        payload.studentName || 'Estudiante',
+        payload.passportCode || 'Colibri-Pan-Sol-24',
+        payload.avatarIcon || '🐦',
+        payload.ganas || 0,
+        payload.quests || 0
+      ].join('|');
+
       const encoder = new TextEncoder();
       const key = await this.getHmacKey();
-      const sigBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(payloadStr));
+      const sigBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(compactStr));
       const sigHex = Array.from(new Uint8Array(sigBuffer))
         .map(b => b.toString(16).padStart(2, '0'))
-        .join('');
-      const b64Url = this.base64UrlEncode(payloadStr);
+        .join('')
+        .slice(0, 16); // 64-bit cryptographic truncation (16 hex chars)
+
+      const b64Url = this.base64UrlEncode(compactStr);
       return `${b64Url}.${sigHex}`;
     } catch (e) {
       console.warn('Crypto signing error:', e);
@@ -54,17 +64,42 @@ const CryptoReport = {
       if (parts.length !== 2) return { valid: false };
 
       const [b64Url, expectedSig] = parts;
-      const payloadStr = this.base64UrlDecode(b64Url);
+      const decodedStr = this.base64UrlDecode(b64Url);
       const encoder = new TextEncoder();
       const key = await this.getHmacKey();
-      const sigBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(payloadStr));
-      const calculatedSig = Array.from(new Uint8Array(sigBuffer))
+      const sigBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(decodedStr));
+      const fullSigHex = Array.from(new Uint8Array(sigBuffer))
         .map(b => b.toString(16).padStart(2, '0'))
         .join('');
+      const shortSigHex = fullSigHex.slice(0, 16);
 
-      if (calculatedSig.toLowerCase() === expectedSig.toLowerCase()) {
-        return { valid: true, payload: JSON.parse(payloadStr) };
+      // 1. Compact pipe-delimited format
+      if (decodedStr.includes('|')) {
+        const segs = decodedStr.split('|');
+        if (segs.length >= 5) {
+          const isMatch = (expectedSig.toLowerCase() === shortSigHex.toLowerCase()) ||
+                          (expectedSig.toLowerCase() === fullSigHex.toLowerCase());
+          if (isMatch) {
+            return {
+              valid: true,
+              payload: {
+                studentName: segs[0],
+                passportCode: segs[1],
+                avatarIcon: segs[2],
+                ganas: parseInt(segs[3], 10) || 0,
+                quests: parseInt(segs[4], 10) || 0
+              }
+            };
+          }
+        }
       }
+
+      // 2. Legacy JSON format fallback
+      if (expectedSig.toLowerCase() === fullSigHex.toLowerCase() || expectedSig.toLowerCase() === shortSigHex.toLowerCase()) {
+        const json = JSON.parse(decodedStr);
+        return { valid: true, payload: json };
+      }
+
       return { valid: false };
     } catch (e) {
       console.warn('Crypto verify error:', e);
