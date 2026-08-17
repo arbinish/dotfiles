@@ -214,10 +214,12 @@ const App = {
     const speechEl = document.getElementById('mascot-speech-text');
     const nameEl = document.querySelector('.mascot-name');
     const avatarEl = document.querySelector('.mascot-avatar');
-    const profile = stateManager.state.profile || { avatarIcon: '🐦', name: 'Tito' };
+    const companion = (window.stateManager && stateManager.getCompanionInfo)
+      ? stateManager.getCompanionInfo()
+      : { icon: '🐦', name: 'Tito el Colibrí' };
 
-    if (avatarEl) avatarEl.textContent = profile.avatarIcon || '🐦';
-    if (nameEl) nameEl.textContent = `${profile.avatarIcon} ${profile.name || 'Tito'}`;
+    if (avatarEl) avatarEl.textContent = companion.icon;
+    if (nameEl) nameEl.textContent = `${companion.icon} ${companion.name}`;
     if (!speechEl) return;
 
     const tips = [

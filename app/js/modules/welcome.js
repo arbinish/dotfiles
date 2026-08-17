@@ -80,6 +80,13 @@ const WelcomeModule = {
     const container = document.getElementById('welcome-view');
     if (!container) return;
 
+    const companion = (window.stateManager && stateManager.getCompanionInfo)
+      ? stateManager.getCompanionInfo()
+      : { icon: '🐦', name: 'Tito el Colibrí' };
+    const studentName = (window.stateManager && stateManager.state && stateManager.state.profile && stateManager.state.profile.name)
+      ? stateManager.state.profile.name
+      : 'Mateo';
+
     container.innerHTML = `
       <!-- Welcome Hero Banner -->
       <section class="welcome-hero-card animate-fade-in">
@@ -98,12 +105,14 @@ const WelcomeModule = {
           </div>
         </div>
 
-        <div class="welcome-hero-visual">
+        <div class="welcome-hero-visual" onclick="ProfileModal.open()" style="cursor: pointer;" title="${t('myProfile')}">
           <div class="welcome-mascot-circle animate-float">
-            <span>🐦</span>
+            <span id="welcome-mascot-icon">${companion.icon}</span>
           </div>
           <div class="welcome-mascot-bubble">
-            ${t('welcomeMascotGreet')}
+            ${currentLang === 'es' 
+              ? `¡Hola ${studentName}! Soy <strong>${companion.name}</strong>, tu compañero de mate. <br><span style="color:var(--terracotta); font-weight:800; font-size:0.7rem;">(Toca para cambiar ✏️)</span>` 
+              : `Hello ${studentName}! I'm <strong>${companion.name}</strong>, your math companion. <br><span style="color:var(--terracotta); font-weight:800; font-size:0.7rem;">(Tap to change ✏️)</span>`}
           </div>
         </div>
       </section>

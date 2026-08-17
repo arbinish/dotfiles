@@ -147,6 +147,7 @@ const ProfileModal = {
     const name = (input && input.value) ? input.value : 'Estudiante';
 
     stateManager.updateProfile(name, this.selectedAvatar);
+    stateManager.updateHeaderUI();
     audio.playSuccess();
     this.close();
 

@@ -80,14 +80,20 @@ class StateManager {
       if (saved) {
         const parsed = JSON.parse(saved);
         this.state = { ...this.state, ...parsed };
-        if (!this.state.profile || !this.state.profile.passportCode) {
-          this.state.profile = {
-            name: "Mateo",
-            avatarKey: "colibri",
-            avatarIcon: "🐦",
-            passportCode: this.generatePassportCode()
-          };
-        }
+      }
+
+      if (!this.state.profile || !this.state.profile.passportCode) {
+        this.state.profile = {
+          name: "Mateo",
+          avatarKey: "colibri",
+          avatarIcon: "🐦",
+          passportCode: this.generatePassportCode()
+        };
+      } else {
+        const key = this.state.profile.avatarKey || 'colibri';
+        const avatarData = this.avatars[key] || this.avatars.colibri;
+        this.state.profile.avatarKey = key;
+        this.state.profile.avatarIcon = avatarData.icon;
       }
     } catch (e) {
       console.warn('LocalStorage load error:', e);
@@ -101,6 +107,15 @@ class StateManager {
     } catch (e) {
       console.warn('LocalStorage save error:', e);
     }
+  }
+
+  getCompanionInfo() {
+    const key = this.state.profile?.avatarKey || 'colibri';
+    const avatarData = this.avatars[key] || this.avatars.colibri;
+    const name = (typeof currentLang !== 'undefined' && currentLang === 'es') 
+      ? avatarData.nameEs 
+      : avatarData.nameEn;
+    return { icon: avatarData.icon, name: name, key: key };
   }
 
   updateProfile(name, avatarKey) {
