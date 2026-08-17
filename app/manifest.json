@@ -1,0 +1,19 @@
+{
+  "name": "AvanzaMath — Math & Culture",
+  "short_name": "AvanzaMath",
+  "description": "Bilingual elementary math learning platform rooted in Hispanic culture.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FDFBF7",
+  "theme_color": "#D9531E",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "games", "kids"]
+}

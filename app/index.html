@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AvanzaMath — Hispanic Cultural Elementary Math Platform</title>
+  <meta name="description" content="Bilingual elementary math learning platform rooted in Hispanic culture. Master addition, subtraction, multiplication, and division with pan dulce, mercados, and piñatas.">
+  <meta name="theme-color" content="#D9531E">
+  
+  <!-- PWA & Mobile Web App Meta -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AvanzaMath">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header" role="banner">
+    <div class="brand-section" onclick="App.navigateTo('welcome')" role="button" tabindex="0" aria-label="AvanzaMath Home">
+      <div class="brand-icon">🪅</div>
+      <div class="brand-text">
+        <h1>AvanzaMath</h1>
+        <p>Matemáticas & Cultura</p>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <!-- Back to Menu Button -->
+      <button class="header-btn hidden" id="btn-back-menu" aria-label="Volver al menú">
+        <span>← Menú</span>
+      </button>
+
+      <!-- Points / Ganas Badge -->
+      <div class="header-badge" id="badge-points" title="Estrellas Ganas">
+        <span>⭐</span>
+        <span id="header-points">0</span>
+        <span id="header-points-text" class="header-badge-label">Ganas</span>
+      </div>
+
+      <!-- Daily Streak Badge -->
+      <div class="header-badge" id="badge-streak" title="Días Consecutivos de Práctica">
+        <span>🔥</span>
+        <span id="header-streak">1</span>
+        <span id="header-streak-text" class="header-badge-label">d racha</span>
+      </div>
+
+      <!-- Student Profile Chip Button -->
+      <button class="header-btn header-profile-chip" id="btn-open-profile" title="Pasaporte del Estudiante" onclick="ProfileModal.open()">
+        <span id="header-profile-avatar">🐦</span>
+        <span id="header-profile-name">Mateo</span>
+      </button>
+
+      <!-- Auto Read-Aloud Toggle -->
+      <button class="header-btn" id="btn-toggle-autoread" title="Voz Automática / Auto Read-Aloud">
+        🗣️ Auto: OFF
+      </button>
+
+      <!-- Sound Toggle with Clear Text -->
+      <button class="header-btn" id="btn-toggle-sound" title="Efectos de Sonido">
+        🔊 FX: ON
+      </button>
+
+      <!-- Bilingual Segmented Language Switcher -->
+      <div class="lang-segmented-switch" id="lang-switch-group" role="radiogroup" aria-label="Selector de Idioma">
+        <button class="lang-segment-btn active" id="lang-btn-es" data-lang="es" title="Cambiar a Español">
+          🇲🇽 ES
+        </button>
+        <button class="lang-segment-btn" id="lang-btn-en" data-lang="en" title="Switch to English">
+          🇺🇸 EN
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="app-nav" role="navigation" aria-label="Main Navigation">
+    <button class="nav-tab-btn active" data-view="welcome" id="tab-btn-welcome">
+      <span>🌟</span> <span id="tab-label-welcome">Inicio</span>
+    </button>
+    <button class="nav-tab-btn" data-view="quests" id="tab-btn-quests">
+      <span>🎯</span> <span id="tab-label-modules">Misiones de Mate</span>
+    </button>
+    <button class="nav-tab-btn" data-view="loteria" id="tab-btn-loteria">
+      <span>🃏</span> <span id="tab-label-loteria">Lotería Bingo</span>
+    </button>
+    <button class="nav-tab-btn" data-view="family" id="tab-btn-family">
+      <span>🏡</span> <span id="tab-label-family">Portal Familiar</span>
+    </button>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-container" role="main">
+
+    <!-- Mascot Speech Banner -->
+    <section class="mascot-banner animate-fade-in" aria-label="Mascot Greeting">
+      <div class="mascot-avatar">🐦</div>
+      <div class="mascot-speech">
+        <div class="mascot-name">Tito el Colibrí</div>
+        <div class="mascot-text" id="mascot-speech-text">
+          ¡Hola amiguito! ¿Listo para hornear pan dulce y ganar estrellas de Ganas?
+        </div>
+      </div>
+    </section>
+
+    <!-- 0. Dedicated Welcome & Lesson Guide View (Default Home) -->
+    <section id="welcome-view" class="animate-fade-in">
+      <!-- Rendered dynamically by WelcomeModule.render() -->
+    </section>
+
+    <!-- 1. Math Quests Hub View: Module Grid -->
+    <section id="home-hub-view" class="animate-fade-in hidden">
+      <div class="modules-grid" id="modules-grid">
+        <!-- Module cards populated dynamically by App.renderQuestsHub() -->
+      </div>
+    </section>
+
+    <!-- 2. Active Quest Workspace View -->
+    <section id="module-workspace-view" class="hidden">
+      <div id="module-workspace">
+        <!-- Interactive Quest component injected here -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Scripts Loading -->
+  <script src="js/i18n.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/modules/profileModal.js"></script>
+  <script src="js/modules/welcome.js"></script>
+  <script src="js/modules/fruitStand.js"></script>
+  <script src="js/modules/panaderia.js"></script>
+  <script src="js/modules/mercado.js"></script>
+  <script src="js/modules/pinata.js"></script>
+  <script src="js/modules/loteria.js"></script>
+  <script src="js/modules/familyPortal.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
